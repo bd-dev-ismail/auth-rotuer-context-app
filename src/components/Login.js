@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/UserContext';
 
 const Login = () => {
-    const { signIn, } = useContext(AuthContext);
+    const { signIn,user } = useContext(AuthContext);
+    const navigate = useNavigate();
+    
     // console.log(signIn);
     const handalSubmit = (e)=>{
         e.preventDefault();
@@ -15,13 +17,19 @@ const Login = () => {
         signIn(email, password)
         .then(result =>{
           const user = result.user;
-          console.log(user);
+          console.log(user)
           form.reset();
+          
         })
         .catch(error=>{
           console.error(error);
         })
     }
+    useEffect(()=>{
+      if(user){
+        navigate('/')
+      }
+    },[user, navigate])
     return (
       <div>
         <div className="hero min-h-screen bg-base-200">

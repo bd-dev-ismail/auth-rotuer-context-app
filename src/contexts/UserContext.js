@@ -8,7 +8,8 @@ const auth = getAuth(app);
 const UserContext = ({children}) => {
     
     //declare a state
-    const [user, setUser] = useState({displayName: 'Ismail Hossen'})
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
     //provider
     const googleProvider = new GoogleAuthProvider();
     //Register
@@ -30,16 +31,17 @@ const UserContext = ({children}) => {
 
     //Auth State change
     useEffect(()=>{
-        const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
-            setUser(currentUser);
-            console.log('auth', currentUser);
+        const unsubscribe = onAuthStateChanged(auth, (user)=>{
+            setUser(user);
+            setLoading(false)
+            console.log('auth', user);
         })
         //clean up the subscribe
         return ()=>{
             unsubscribe();
         }
     },[])
-    const authInfo = { user, createUser, signIn, logOut, signInWithGoogle };
+    const authInfo = { user, loading,  createUser, signIn, logOut, signInWithGoogle };
 
     return (
        <AuthContext.Provider value={authInfo}>
